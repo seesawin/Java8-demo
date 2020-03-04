@@ -24,18 +24,17 @@ public class Valid_Palindrome_125 {
 //        String test = "av@vcva";
 //        String test = "A man, a plan, a canal: Panama";
 //        String test = "A man, a plan, a canal -- Panama";
-        String test = "0P";
+        String test = "###//0Pa##aa!!";
         boolean palindrome = object.isPalindrome(test);
         System.out.println(palindrome);
 
     }
 
     public boolean isPalindrome(String s) {
-        s = this.validtaeString(s);
-
+        s = this.stringFilter(s);
+        System.out.println("s: " + s);
         String left;
         String right;
-
         for (int i = 0; i < s.length() / 2; i++) {
             left = String.valueOf(s.charAt(i));
             right = String.valueOf(s.charAt(s.length() - 1 - i));
@@ -44,10 +43,10 @@ public class Valid_Palindrome_125 {
                 return false;
             }
         }
-
         return true;
     }
 
+    // faster
     public String validtaeString(String str) {
         StringBuilder sb = new StringBuilder();
         str = str.toLowerCase();
@@ -61,17 +60,10 @@ public class Valid_Palindrome_125 {
         return sb.toString();
     }
 
-
-    static Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[`~!@#$%^&;*()+=|{}':;',//[//].<>/?~!@#￥%……&;*()——+|{}【】‘;:”“’。,、?]");
-
-    // 過濾特殊字元
-    public String StringFilter(String str) throws PatternSyntaxException {
-        // 只允許字母和數字
-        //String regEx = "[^a-zA-Z0-9]";
-        // 清除掉所有特殊字元
-        String regEx = "[`~!@#$%^&;*()+=|{}':;',//[//].<>/?~!@#￥%……&;*()——+|{}【】‘;:”“’。,、?]";
-        Pattern p = SPECIAL_REGEX_CHARS.compile(regEx);
-        Matcher m = p.matcher(str);
-        return m.replaceAll("").replaceAll("\\s+","").toLowerCase().trim();
+    // 過濾特殊字元，只允許字母和數字
+    public String stringFilter(String str) throws PatternSyntaxException {
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+        Matcher m = pattern.matcher(str);
+        return m.replaceAll("").toLowerCase().trim();
     }
 }
