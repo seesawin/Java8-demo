@@ -1,6 +1,8 @@
 package Leetcode;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Two_Sum_1 {
     /**
@@ -17,11 +19,14 @@ public class Two_Sum_1 {
      */
     public static void main(String[] args) {
 //        int[] array = new int[]{0, 2, 7, 11, 15, 0};
-        int[] array = new int[]{3, 2, 95, 4, -3};
+//        int[] array = new int[]{3, 2, 95, -2, -3};
+        int[] array = new int[]{3, 3};
 
         Two_Sum_1 object = new Two_Sum_1();
 //        int[] ints = object.twoSum(array, 0);
-        int[] ints = object.twoSum(array, 92);
+//        int[] ints = object.twoSum(array, 0);
+        int[] ints = object.twoSum3(array, 6);
+//        int[] ints = object.twoSum4(array, 6);
         if (ints == null) {
             System.out.println(ints);
             return;
@@ -39,5 +44,46 @@ public class Two_Sum_1 {
             }
         }
         return null;
+    }
+
+    public int[] twoSum2(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            map.put(nums[i], i);
+        }
+        for(int i = 0; i < nums.length; i++) {
+            int s = target - nums[i];
+            Integer j = map.get(s);
+            if(j != null && j != i) {
+                return new int[] {i, j};
+            }
+        }
+        return null;
+    }
+
+    public int[] twoSum3(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            int s = target - nums[i];
+            Integer j = map.get(s);
+            if(j != null) {
+                return new int[] {j, i};
+            }
+            map.put(nums[i], i);
+        }
+        return null;
+    }
+
+    // official solution
+    public int[] twoSum4(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[] { map.get(complement), i };
+            }
+            map.put(nums[i], i);
+        }
+        throw new IllegalArgumentException("No two sum solution");
     }
 }
