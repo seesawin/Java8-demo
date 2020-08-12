@@ -1,12 +1,13 @@
 package stream;
 
 import entity.Dish;
+import entity.Fruits;
 import util.DataBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Reduce {
     public static void main(String[] args) {
@@ -114,6 +115,26 @@ public class Reduce {
 
         總結：reduce適合不可變容器歸約，collect適合可變容器歸約。collect適合並行。
         * */
+
+
+        /**
+         * 合併不同屬性至同一物件下
+         * */
+        List<Dish> aList = DataBuilder.getDishs2();
+        List<Dish> bList = DataBuilder.getDishs3();
+        // 合併順訓要正確
+        List<Dish> collect = Stream.of(aList, bList).flatMap(l -> l.stream()).collect(Collectors.toList());
+//        List<Dish> collect = Stream.of(bList, aList).flatMap(l -> l.stream()).collect(Collectors.toList());
+        collect.forEach(System.out::println);
+
+        List<Dish> dishDatas = new ArrayList<>();
+        Map<String, List<Dish>> collect1 = collect.parallelStream().collect(Collectors.groupingBy(Dish::getName));
+        collect1.forEach((k, v) -> {
+            System.out.println("k:" + k + ", v:" + v);
+            v.stream().reduce((a, b) -> new Dish(a.getName(), a.isExists(), a.getCalories(), b.getType())).ifPresent(dishDatas::add);
+        });
+
+        dishDatas.forEach(System.out::println);
         System.out.println("testReduce end...");
     }
 }

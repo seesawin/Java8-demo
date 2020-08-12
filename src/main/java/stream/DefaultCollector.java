@@ -1,12 +1,11 @@
 package stream;
 
 import entity.Dish;
+import entity.Fruits;
 import util.DataBuilder;
 
-import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DefaultCollector {
@@ -51,6 +50,16 @@ public class DefaultCollector {
         System.out.println("IntSummaryStatistics count: " + count);
         System.out.println("IntSummaryStatistics sum: " + sum);
         System.out.println("--------------------------------");
+
+        int sum0 = dishes.stream().mapToInt(Dish::getCalories).sum();
+        System.out.println("sum0: " + sum0);
+        List<Fruits> fruitBeans = DataBuilder.getFruitBeans();
+        double sum1 = fruitBeans.stream().mapToDouble(bean -> bean.getPrice().doubleValue()).sum();
+        System.out.println("sum1: " + sum1);
+        BigDecimal sum2 = fruitBeans.stream().map(Fruits::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("sum2: " + sum2);
+        DoubleSummaryStatistics collect = fruitBeans.stream().map(Fruits::getPrice).collect(Collectors.summarizingDouble(BigDecimal::doubleValue));
+        System.out.println("sum3: " + collect.getSum());
 
         System.out.println("testDefaultCollector end...");
     }
