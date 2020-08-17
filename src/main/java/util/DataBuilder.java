@@ -29,15 +29,13 @@ public class DataBuilder {
 
     public static List<Dish> getDishs2() {
         final List<Dish> dishes = Arrays.asList(
-                new Dish("pork", false, 800, null),
-                new Dish("beef", false, 700, null)
+                new Dish("pork", false, 800, null)
         );
         return dishes;
     }
 
     public static List<Dish> getDishs3() {
         final List<Dish> dishes = Arrays.asList(
-                new Dish("pork", false, 0, Type.MEAT),
                 new Dish("beef", false, 0, Type.FISH)
         );
         return dishes;

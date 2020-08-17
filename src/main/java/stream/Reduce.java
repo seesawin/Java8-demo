@@ -122,7 +122,7 @@ public class Reduce {
          * */
         List<Dish> aList = DataBuilder.getDishs2();
         List<Dish> bList = DataBuilder.getDishs3();
-        // 合併順訓要正確
+        // 合併順序要正確
         List<Dish> collect = Stream.of(aList, bList).flatMap(l -> l.stream()).collect(Collectors.toList());
 //        List<Dish> collect = Stream.of(bList, aList).flatMap(l -> l.stream()).collect(Collectors.toList());
         collect.forEach(System.out::println);
@@ -135,6 +135,23 @@ public class Reduce {
         });
 
         dishDatas.forEach(System.out::println);
+
+        List<String> a = new ArrayList<>();
+        a.add("123");
+        a.add("1234");
+
+        a.stream().reduce((x, y) -> {
+            System.out.println(x);
+            return x;
+        }).ifPresent(System.out::println);
+
+        Optional<String> reduce = a.stream().reduce((x, y) -> {
+            System.out.println(x);
+            return x;
+        });
+        String s = reduce.get();
+        System.out.println(s);
+
         System.out.println("testReduce end...");
     }
 }
