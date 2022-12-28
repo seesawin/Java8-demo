@@ -4,15 +4,21 @@ import entity.Dish;
 import entity.Type;
 import util.DataBuilder;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Collector {
     public static void main(String[] args) {
-        testCollector();
+//        testCollector();
+        test1();
     }
 
     /*
@@ -53,5 +59,113 @@ public class Collector {
             e.printStackTrace();
         }
         System.out.println("testCollector end...");
+    }
+
+    private static void test1() {
+        System.out.println("test1 start...");
+        final var l1 = Arrays.asList("1", "2", "3", "3");
+        final var l2 = l1.stream().collect(Collectors.toCollection(LinkedList::new));
+        final var l21 = l1.stream().collect(Collectors.toUnmodifiableList());
+//        l21.add("4");
+//        l21.forEach(System.out::println);
+        System.out.println("---");
+
+//        final var l3 = l1.stream().collect(Collectors.toMap(Function.identity(), it -> it + "-a"));
+//        final var l3 = l1.stream().collect(Collectors.toMap(Function.identity(), it -> it + "-a", (e, r) -> e));
+        final var l3 = l1.stream().collect(Collectors.toMap(Function.identity(), it -> it + "-a", (e, r) -> e, HashMap::new));
+        l3.forEach((k, v) -> System.out.println(k + ":" + v));
+
+        final var l31 = l1.stream().collect(Collectors.toUnmodifiableMap(Function.identity(), it -> it + "-a", (e, r) -> e));
+//        l31.put("4", "4-b");
+//        l31.forEach((k, v) -> System.out.println(k + ":" + v));
+
+//        final var l32 = l1.stream().collect(Collectors.toConcurrentMap(Function.identity(), it -> it + "-a"));
+//        final var l32 = l1.stream().collect(Collectors.toConcurrentMap(Function.identity(), it -> it + "-a", (e, r) -> e));
+        final var l32 = l1.stream().collect(Collectors.toConcurrentMap(Function.identity(), it -> it + "-a", (e, r) -> e, ConcurrentHashMap::new));
+        l32.forEach((k, v) -> System.out.println(k + ":" + v));
+
+        System.out.println("---");
+
+        final var l4 = l1.stream().collect(Collectors.joining());
+        System.out.println(l4);
+
+        final var l41 = l1.stream().collect(Collectors.joining("-"));
+        System.out.println(l41);
+
+        final var l42 = l1.stream().collect(Collectors.joining("-", "[", "]"));
+        System.out.println(l42);
+
+        System.out.println("---");
+        final var l5 = l1.stream().collect(Collectors.mapping(it -> it + "b", Collectors.toList()));
+        System.out.println(l5);
+
+        System.out.println("---");
+        final var l6 = l1.stream().collect(Collectors.collectingAndThen(Collectors.toSet(), it -> it.stream().collect(Collectors.joining(","))));
+        System.out.println(l6);
+
+        System.out.println("---");
+        final var l7 = l1.stream().collect(Collectors.counting());
+        System.out.println(l7);
+
+        System.out.println("---");
+//        final var l8 = l1.stream().collect(Collectors.maxBy((a, b) -> a.length() - b.length()));
+        final var l8 = l1.stream().max(Comparator.comparingInt(String::length));
+        System.out.println(l8.get());
+
+//        final var l9 = l1.stream().collect(Collectors.minBy((a, b) -> a.length() - b.length()));
+        final var l9 = l1.stream().min(Comparator.comparingInt(String::length));
+        System.out.println(l9.get());
+
+        System.out.println("---");
+        final var l10 = l1.stream().collect(Collectors.summingInt(String::length));
+        System.out.println(l10);
+
+        final var l101 = l1.stream().collect(Collectors.averagingInt(String::length));
+        System.out.println(l101);
+
+        System.out.println("---");
+        final var ints = Arrays.asList(1, 2, 3, 4, 5, 6);
+        final var l11 = ints.stream().collect(Collectors.reducing((a, b) -> a + b));
+        System.out.println(l11.get());
+
+        final var l112 = ints.stream().collect(Collectors.reducing((Integer::sum)));
+        System.out.println(l112.get());
+
+        final var l113 = ints.stream().collect(Collectors.reducing(100, (Integer::sum)));
+        System.out.println(l113);
+
+        final var l114 = ints.stream().collect(Collectors.reducing(100, it -> it - 10, (Integer::sum)));
+        System.out.println(l114);
+
+        System.out.println("---");
+        final var g1 = l1.stream().collect(Collectors.groupingBy(Function.identity()));
+        System.out.println(g1);
+
+        final var g2 = l1.stream().collect(Collectors.groupingBy(String::length, Collectors.toMap(Function.identity(), it -> it + "-a", (e, r) -> e)));
+        System.out.println(g2);
+
+        List<String> list = Arrays.asList("123", "456", "789", "1101", "212121121", "asdaa", "3e3e3e", "2321eew");
+        groupingByTest(list);
+
+        System.out.println("---");
+        final var p1 = ints.stream().collect(Collectors.partitioningBy(it -> it > 2));
+        System.out.println(p1);
+
+        final var p2 = ints.stream().collect(Collectors.partitioningBy(it -> it > 2, Collectors.toSet()));
+        System.out.println(p2);
+
+        System.out.println("---");
+        final var all = ints.stream().mapToInt(it -> it).sum();
+        System.out.println(all);
+        final var sum = ints.stream().collect(Collectors.summarizingInt(it -> it));
+        System.out.println(sum);
+        System.out.println("test1 end...");
+    }
+
+    public static void groupingByTest(List<String> list) {
+        Map<Integer, List<String>> s = list.stream().collect(Collectors.groupingByConcurrent(String::length));
+        Map<Integer, List<String>> ss = list.stream().collect(Collectors.groupingByConcurrent(String::length, Collectors.toList()));
+        Map<Integer, Set<String>> sss = list.stream().collect(Collectors.groupingByConcurrent(String::length, ConcurrentHashMap::new, Collectors.toSet()));
+        System.out.println(s.toString() + "\n" + ss.toString() + "\n" + sss.toString());
     }
 }

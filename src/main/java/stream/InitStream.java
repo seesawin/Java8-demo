@@ -7,6 +7,7 @@ import util.DataBuilder;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 public class InitStream {
     public static void main(String[] args) {
         testStream();
+        test1();
     }
 
     /*
@@ -97,5 +99,71 @@ public class InitStream {
         //Another way
         IntStream.generate(() -> (int) (System.nanoTime() % 100)).
                 limit(10).forEach(System.out::println);
+    }
+
+    public static void test1() {
+        final var list = Stream.of(1, 2, 2, 2, 3, 4, 5, 6, 7, 8).collect(Collectors.toList());
+        final var result = list.stream().parallel().reduce((x, y) -> x * y);
+        System.out.println(result.get());
+        System.out.println("---");
+
+        final var r2 = list.stream().parallel().reduce(1, (x, y) -> x * y);
+        System.out.println(r2);
+        System.out.println("---");
+
+        final var r3 = list.stream().parallel().reduce(1, (x, y) -> x * y, (x, y) -> x * y);
+        System.out.println(r3);
+        System.out.println("---");
+
+        final var r4 = list.stream().reduce(0, (x, y) -> x > y ? x : y);
+        System.out.println(r4);
+        System.out.println("---");
+
+        final var max1 = list.stream().max(Comparator.naturalOrder());
+        System.out.println(max1);
+        System.out.println("---");
+
+        final var processors = Runtime.getRuntime().availableProcessors();
+        final var parallelism = ForkJoinPool.getCommonPoolParallelism();
+        System.out.println("processors: " + processors);
+        System.out.println("parallelism: " + parallelism);
+        final var r5 = list.stream().parallel().reduce(0, (a, b) -> {
+            System.out.println(Thread.currentThread().getName() + String.format(", a=%s, b=%s", a, b));
+            return a + b;
+        });
+        System.out.println(r5);
+        System.out.println("---");
+
+        final var g1 = list.stream().collect(Collectors.groupingBy(it -> it > 3 ? true : false,
+                Collectors.mapping(it -> it.toString(), Collectors.toList())));
+        System.out.println(g1);
+        System.out.println("---");
+
+        final var g2 = list.stream().collect(Collectors.groupingBy(it -> it > 3 ? true : false,
+                Collectors.collectingAndThen(Collectors.toSet(), it -> it.stream().max(Comparator.naturalOrder()))));
+        System.out.println(g2);
+        System.out.println("---");
+
+        final var g3 = list.stream().collect(Collectors.collectingAndThen(Collectors.toSet(), it -> it.stream().max(Comparator.naturalOrder())));
+        System.out.println(g3);
+        System.out.println("---");
+
+        final var list2 = Stream.of("1", "2", "3", "4", "5", "6");
+        final var rr1 = list2.sorted(Comparator.reverseOrder()).mapToInt(Integer::valueOf).max();
+        System.out.println(rr1);
+
+        System.out.println("---");
+        IntStream.range(1, 10)
+                .peek(x -> System.out.print("\nA" + x))
+                .limit(3)
+                .peek(x -> System.out.print("B" + x))
+                .forEach(x -> System.out.print("C" + x));
+
+        System.out.println("---");
+        IntStream.range(1, 10)
+                .peek(x -> System.out.print("\nA" + x))
+                .skip(6)
+                .peek(x -> System.out.print("B" + x))
+                .forEach(x -> System.out.print("C" + x));
     }
 }
