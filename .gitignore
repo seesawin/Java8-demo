@@ -39,3 +39,5 @@ hs_err_pid*
 .idea/workspace.xml
 
 Java8-demo.iml
+
+.idea/

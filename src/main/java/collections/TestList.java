@@ -90,6 +90,10 @@ public class TestList {
         map2.forEach((k, v) -> System.out.println(k + ":" + v));
         System.out.println("---");
 
+        map2.computeIfAbsent(1, v -> new ArrayList<>()).add("yi4");
+        map2.forEach((k, v) -> System.out.println(k + ":" + v));
+        System.out.println("---");
+
 
     }
 }
