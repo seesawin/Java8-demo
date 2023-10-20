@@ -6,5 +6,6 @@ public class Test03 {
         System.out.println("update at dev");
         System.out.println("insert at dev");
         System.out.println("patch at dev");
+        System.out.println("put at dev");
     }
 }
