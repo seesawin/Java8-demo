@@ -20,6 +20,10 @@ public class Test {
         System.out.println("Hello world!");
         System.out.println("Hello world!");
         System.out.println("Hello world!");
+        System.out.println("test rebase 02");
+        System.out.println("test rebase 02");
+        System.out.println("test rebase 02");
+        System.out.println("test rebase 02");
 
     }
 }
