@@ -9,5 +9,6 @@ public class Test03 {
         System.out.println("put at dev");
         System.out.println("del at dev");
         System.out.println("query at dev");
+        System.out.println("query2 at dev");
     }
 }
