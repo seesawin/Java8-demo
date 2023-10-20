@@ -7,5 +7,6 @@ public class Test {
         System.out.println("test rebase 03");
         System.out.println("add");
         System.out.println("add");
+        System.out.println("add");
     }
 }
