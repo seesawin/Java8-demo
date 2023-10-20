@@ -10,5 +10,10 @@ public class Test03 {
         System.out.println("del at dev");
         System.out.println("query at dev");
         System.out.println("query2 at dev");
+        System.out.println("feature add 001");
+
+        System.out.println("feature add 002");
+
+        System.out.println("feature add 003");
     }
 }
