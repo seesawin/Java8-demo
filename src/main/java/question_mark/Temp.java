@@ -3,6 +3,9 @@ package question_mark;
 public class Temp {
     public static void main(String[] args) {
         // bet : win
+        // bet : win
+        // bet : win
+        // bet : win
         // 1: 1
         // 1: 1
         // 1: 1
