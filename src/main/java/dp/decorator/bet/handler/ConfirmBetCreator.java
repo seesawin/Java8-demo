@@ -1,21 +1,20 @@
 package dp.decorator.bet.handler;
 
 import dp.decorator.bet.bo.BetHandlerDTO;
+import dp.decorator.bet.bo.ConfirmBet;
 
 import java.math.BigDecimal;
 
-public final class DataPersistenceHandler implements IBetHandler {
+public class ConfirmBetCreator implements IBetHandler {
 
     private IBetHandler next;
 
     @Override
     public BigDecimal handle(BetHandlerDTO betHandlerDTO) {
-        System.out.println("bet check balance");
-        System.out.println("bet confirmBet");
-        System.out.println("bet statementTransaction");
-        System.out.println("bet OTL");
+        System.out.println("create confirm bet");
+        betHandlerDTO.setConfirmBet(ConfirmBet.builder().build());
 
-        return BigDecimal.valueOf(100L);
+        return next.handle(betHandlerDTO);
     }
 
     @Override

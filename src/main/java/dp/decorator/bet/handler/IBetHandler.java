@@ -6,4 +6,6 @@ import java.math.BigDecimal;
 
 public interface IBetHandler {
     BigDecimal handle(BetHandlerDTO betHandlerDTO);
+
+    IBetHandler setNext(IBetHandler next);
 }

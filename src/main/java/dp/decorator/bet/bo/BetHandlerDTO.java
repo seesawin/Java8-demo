@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class BetHandlerDTO {
     private Player player;
+    private TemplateBet templateBet;
     private ConfirmBet confirmBet;
-    private String newBalance;
 }

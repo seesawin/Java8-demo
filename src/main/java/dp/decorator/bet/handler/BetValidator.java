@@ -9,8 +9,9 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class BetValidator implements IBetHandler {
 
-    private final IBetHandler next;
     private final BetValidatorFactory betValidatorFactory;
+
+    private IBetHandler next;
 
     @Override
     public BigDecimal handle(BetHandlerDTO betHandlerDTO) {
@@ -22,6 +23,12 @@ public class BetValidator implements IBetHandler {
         betValidatorFactory.getValidator("type").run();
 
         return next.handle(betHandlerDTO);
+    }
+
+    @Override
+    public IBetHandler setNext(IBetHandler next) {
+        this.next = next;
+        return this;
     }
 
 }
